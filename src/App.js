@@ -1,5 +1,7 @@
+import Counter from './Counter';
+
 function App() {
-	return 'Hello world';
+	return <Counter initialCount={0} />;
 }
 
 export default App;
