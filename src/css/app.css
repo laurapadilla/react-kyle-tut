@@ -1,0 +1,12 @@
+@import-normalize;
+@import 'recipe-list.css';
+
+*,
+*::before,
+*::after {
+	font-family: 'Helvetica Neue', sans-serif;
+}
+
+body {
+	color: black;
+}

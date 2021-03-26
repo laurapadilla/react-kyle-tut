@@ -1,0 +1,8 @@
+.recipe-list {
+	border-right: 1px solid black;
+	min-height: 100vh;
+}
+
+/* center button */
+.recipe-list__add-recipe-btn-container {
+}
