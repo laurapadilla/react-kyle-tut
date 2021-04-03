@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import RecipeList from "./RecipeList";
 import "../css/app.css";
 import uuidv4 from "uuid/v4";
@@ -6,12 +6,25 @@ import uuidv4 from "uuid/v4";
 // create context so that we don't need to use props to pass down functions
 export const RecipeContext = React.createContext();
 
+// create local storage key
+const LOCAL_STORAGE_KEY = "cookingWithReact.recipes";
+
 // set up value to pass down to context
 // context will take functions that update the state
 
 function App() {
   // [currentState, updatedState] and then we  default it to sampleRecipes
   const [recipes, setRecipes] = useState(sampleRecipes);
+
+  useEffect(() => {
+    const recipeJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (recipeJSON != null) setRecipes(JSON.parse(recipeJSON));
+  }, []);
+
+  // every time recipe changes we call useEffect and store that recipe list
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(recipes));
+  }, [recipes]);
 
   // object that contains the two functions
   const recipeContextValue = {
