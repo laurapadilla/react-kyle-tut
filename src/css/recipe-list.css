@@ -1,8 +1,11 @@
 .recipe-list {
-	border-right: 1px solid black;
-	min-height: 100vh;
+  border-right: 1px solid black;
+  min-height: 100vh;
+  width: 50%;
 }
 
 /* center button */
 .recipe-list__add-recipe-btn-container {
+  text-align: center;
+  padding: 2rem 0;
 }
