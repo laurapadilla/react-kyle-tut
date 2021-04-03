@@ -3,9 +3,21 @@ import RecipeList from "./RecipeList";
 import "../css/app.css";
 import uuidv4 from "uuid/v4";
 
+// create context so that we don't need to use props to pass down functions
+export const RecipeContext = React.createContext();
+
+// set up value to pass down to context
+// context will take functions that update the state
+
 function App() {
   // [currentState, updatedState] and then we  default it to sampleRecipes
   const [recipes, setRecipes] = useState(sampleRecipes);
+
+  // object that contains the two functions
+  const recipeContextValue = {
+    handleRecipeAdd: handleRecipeAdd,
+    handleRecipeDelete: handleRecipeDelete,
+  };
 
   function handleRecipeAdd() {
     const newRecipe = {
@@ -32,13 +44,12 @@ function App() {
     setRecipes(recipes.filter((recipe) => recipe.id !== id));
   }
 
-  // pass down functions using props and then call then in a child component
+  // we wrap everything we return inside Context and provide the value to everything inside it
+  // we no longer need to pass values down inside props
   return (
-    <RecipeList
-      recipes={recipes}
-      handleRecipeAdd={handleRecipeAdd}
-      handleRecipeDelete={handleRecipeDelete}
-    />
+    <RecipeContext.Provider value={recipeContextValue}>
+      <RecipeList recipes={recipes} />
+    </RecipeContext.Provider>
   );
 }
 
