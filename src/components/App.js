@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import RecipeList from "./RecipeList";
 import "../css/app.css";
 import uuidv4 from "uuid/v4";
+import RecipeEdit from "./RecipeEdit";
 
 // create context so that we don't need to use props to pass down functions
 export const RecipeContext = React.createContext();
@@ -13,8 +14,13 @@ const LOCAL_STORAGE_KEY = "cookingWithReact.recipes";
 // context will take functions that update the state
 
 function App() {
+  const [selectedRecipeId, setSelectedRecipeId] = useState();
   // [currentState, updatedState] and then we  default it to sampleRecipes
   const [recipes, setRecipes] = useState(sampleRecipes);
+
+  const selectedRecipe = recipes.find(
+    (recipe) => recipe.id === selectedRecipeId
+  );
 
   useEffect(() => {
     const recipeJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -30,7 +36,13 @@ function App() {
   const recipeContextValue = {
     handleRecipeAdd: handleRecipeAdd,
     handleRecipeDelete: handleRecipeDelete,
+    handleRecipeSelect: handleRecipeSelect,
+    handleRecipeChange: handleRecipeChange,
   };
+
+  function handleRecipeSelect(id) {
+    setSelectedRecipeId(id);
+  }
 
   function handleRecipeAdd() {
     const newRecipe = {
@@ -52,6 +64,16 @@ function App() {
     setRecipes([...recipes, newRecipe]);
   }
 
+  // takes id of recipe, and recipe that we're replacing old recipe with
+  function handleRecipeChange(id, recipe) {
+    // get new recipe
+    // copy current recipe into an array so that you don't change the state
+    const newRecipes = [...recipes];
+    const index = newRecipes.findIndex((r) => r.id === id);
+    newRecipes[index] = recipe;
+    setRecipes(newRecipes);
+  }
+
   // takes id of the recipe we want to delete
   function handleRecipeDelete(id) {
     setRecipes(recipes.filter((recipe) => recipe.id !== id));
@@ -62,6 +84,7 @@ function App() {
   return (
     <RecipeContext.Provider value={recipeContextValue}>
       <RecipeList recipes={recipes} />
+      {selectedRecipe && <RecipeEdit recipe={selectedRecipe} />}
     </RecipeContext.Provider>
   );
 }
